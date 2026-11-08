@@ -1,0 +1,23 @@
+---
+import Base from '../../layouts/Base.astro';
+import { SITIO } from '../../data/sitio';
+---
+<Base
+  titulo="Solicitud enviada | DCM"
+  descripcion="Gracias por tu mensaje. Te responderé lo antes posible con una propuesta para tu proyecto."
+  noindex
+>
+  <section class="seccion">
+    <div class="contenedor texto-largo">
+      <span class="antetitulo">Contacto</span>
+      <h1>Gracias, he recibido tu mensaje</h1>
+      <p class="entradilla">
+        Te responderé lo antes posible. Si es urgente, llámame al <a href={SITIO.telefonoEnlace}>{SITIO.telefono}</a>.
+      </p>
+      <div class="botones">
+        <a class="boton" href="/proyectos/">Ver proyectos</a>
+        <a class="boton boton--secundario" href="/">Volver al inicio</a>
+      </div>
+    </div>
+  </section>
+</Base>

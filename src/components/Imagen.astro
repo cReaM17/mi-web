@@ -1,0 +1,42 @@
+---
+/**
+ * Imagen optimizada. Las fotos se sirven en AVIF/WebP con varios tamaños;
+ * las ilustraciones SVG se sirven tal cual (son vectoriales y pesan muy poco).
+ * El texto alternativo (alt) es obligatorio.
+ */
+import { Image, Picture } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  src: ImageMetadata;
+  alt: string;
+  widths?: number[];
+  sizes?: string;
+  class?: string;
+  loading?: 'eager' | 'lazy';
+  fetchpriority?: 'high' | 'low' | 'auto';
+}
+
+const { src, alt, widths = [480, 800, 1200], sizes, class: clase, loading = 'lazy', fetchpriority = 'auto' } =
+  Astro.props;
+const esSvg = src.format === 'svg';
+const anchos = widths.filter((w) => w <= src.width);
+if (anchos.length === 0) anchos.push(src.width);
+---
+{
+  esSvg ? (
+    <Image src={src} alt={alt} format="svg" class={clase} loading={loading} fetchpriority={fetchpriority} decoding="async" />
+  ) : (
+    <Picture
+      src={src}
+      alt={alt}
+      formats={['avif', 'webp']}
+      widths={anchos}
+      sizes={sizes ?? '100vw'}
+      class={clase}
+      loading={loading}
+      fetchpriority={fetchpriority}
+      decoding="async"
+    />
+  )
+}

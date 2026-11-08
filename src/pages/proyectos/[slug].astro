@@ -1,0 +1,318 @@
+---
+import Image from '../../components/Imagen.astro';
+import Base from '../../layouts/Base.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { LLAMADA, SITIO } from '../../data/sitio';
+import {
+  proyectosOrdenados,
+  secciones,
+  imagenPrincipal,
+  relacionados,
+  fechaLarga,
+  fechaIso,
+  type Proyecto,
+} from '../../lib/proyectos';
+import { conPendientes, recortar, sinPendientes } from '../../lib/texto';
+
+export async function getStaticPaths() {
+  const todos = await proyectosOrdenados();
+  return todos.map((proyecto) => ({ params: { slug: proyecto.id }, props: { proyecto, todos } }));
+}
+
+interface Props {
+  proyecto: Proyecto;
+  todos: Proyecto[];
+}
+
+const { proyecto, todos } = Astro.props;
+const { data } = proyecto;
+const s = secciones(proyecto.body);
+const img = imagenPrincipal(proyecto);
+const galeria = data.imagenes.slice(1);
+const otros = relacionados(proyecto, todos);
+
+const sufijo = ' | DCM';
+const tituloSeo =
+  data.titulo.length + sufijo.length <= 60 ? data.titulo + sufijo : recortar(data.titulo, 60);
+const descripcion = recortar(sinPendientes(s.reto), 155);
+const site = Astro.site ?? new URL('https://mi-web.pages.dev');
+const url = new URL(`/proyectos/${proyecto.id}/`, site).href;
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    '@id': `${url}#proyecto`,
+    name: data.titulo,
+    headline: data.titulo,
+    description: sinPendientes(s.reto),
+    abstract: sinPendientes(s.resultado),
+    dateCreated: fechaIso(data.fecha),
+    genre: data.categoria,
+    keywords: data.etiquetas.join(', '),
+    inLanguage: 'es',
+    url,
+    author: { '@id': new URL('/#persona', site).href },
+    creator: { '@type': 'Person', name: SITIO.nombre },
+    ...(data.enlace ? { sameAs: data.enlace } : {}),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Inicio', item: new URL('/', site).href },
+      { '@type': 'ListItem', position: 2, name: 'Proyectos', item: new URL('/proyectos/', site).href },
+      { '@type': 'ListItem', position: 3, name: data.titulo, item: url },
+    ],
+  },
+];
+
+const bloques = [
+  { id: 'reto', titulo: 'Reto', texto: s.reto },
+  { id: 'solucion', titulo: 'Solución', texto: s.solucion },
+  { id: 'resultado', titulo: 'Resultado', texto: s.resultado },
+];
+---
+<Base
+  titulo={tituloSeo}
+  descripcion={descripcion}
+  imagen={img.src}
+  imagenAlt={img.alt}
+  tipo="article"
+  jsonLd={jsonLd}
+>
+  <article class="ficha">
+    <div class="contenedor">
+      <nav class="migas" aria-label="Migas de pan">
+        <ol>
+          <li><a href="/">Inicio</a></li>
+          <li><a href="/proyectos/">Proyectos</a></li>
+          <li aria-current="page">{data.titulo}</li>
+        </ol>
+      </nav>
+
+      <header class="ficha__cabecera">
+        <span class="antetitulo">{data.categoria}</span>
+        <h1>{data.titulo}</h1>
+        <dl class="ficha__datos">
+          <div><dt>Fecha</dt><dd><time datetime={fechaIso(data.fecha)}>{fechaLarga(data.fecha)}</time></dd></div>
+          <div><dt>Cliente</dt><dd>{data.cliente}</dd></div>
+          <div><dt>Categoría</dt><dd>{data.categoria}</dd></div>
+        </dl>
+        {
+          data.etiquetas.length > 0 && (
+            <ul class="ficha__etiquetas" aria-label="Etiquetas">
+              {data.etiquetas.map((e) => (
+                <li class="etiqueta">{e.replace(/-/g, ' ')}</li>
+              ))}
+            </ul>
+          )
+        }
+      </header>
+
+      <div class="ficha__cuerpo">
+        <figure class="ficha__imagen">
+          <Image
+            src={img.src}
+            alt={img.alt}
+            widths={[480, 768, 1200]}
+            sizes="(min-width: 64rem) 32rem, 92vw"
+            loading="eager"
+            fetchpriority="high"
+          />
+          {img.esIlustracion && <figcaption>Ilustración de la categoría {data.categoria}.</figcaption>}
+        </figure>
+
+        <div class="ficha__texto">
+          {
+            bloques.map((b) => (
+              <section aria-labelledby={`t-${b.id}`}>
+                <h2 id={`t-${b.id}`}>{b.titulo}</h2>
+                {b.texto
+                  .split(/\n\s*\n/)
+                  .filter(Boolean)
+                  .map((par) => (
+                    <p set:html={conPendientes(par.trim())} />
+                  ))}
+              </section>
+            ))
+          }
+          {
+            data.enlace && (
+              <p>
+                <a href={data.enlace} rel="noopener">Más información sobre el proyecto</a>
+              </p>
+            )
+          }
+        </div>
+      </div>
+
+      {
+        galeria.length > 0 && (
+          <section class="galeria" aria-labelledby="t-galeria">
+            <h2 id="t-galeria">Galería</h2>
+            <ul class="rejilla">
+              {galeria.map((g) => (
+                <li>
+                  <figure>
+                    <Image src={g.src} alt={g.alt} widths={[400, 800]} sizes="(min-width: 40rem) 30vw, 92vw" />
+                    <figcaption>{g.alt}</figcaption>
+                  </figure>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+
+      <aside class="ficha__llamada" aria-label="Contacto">
+        <p>{LLAMADA.corta}</p>
+        <a class="boton" href="/contacto/">{LLAMADA.boton}</a>
+      </aside>
+    </div>
+  </article>
+
+  {
+    otros.length > 0 && (
+      <section class="seccion seccion--alt" aria-labelledby="t-relacionados">
+        <div class="contenedor">
+          <h2 id="t-relacionados">Proyectos relacionados</h2>
+          <ul class="rejilla">
+            {otros.map((p) => (
+              <li>
+                <ProjectCard proyecto={p} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+</Base>
+
+<style>
+  .ficha {
+    padding-block: 2rem clamp(3rem, 7vw, 5rem);
+  }
+  .migas ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 0.5rem;
+    margin: 0 0 2rem;
+    padding: 0;
+    list-style: none;
+    font-size: 0.9rem;
+    color: var(--c-texto-sec);
+  }
+  .migas li + li::before {
+    content: '/';
+    margin-right: 0.5rem;
+    color: var(--c-linea);
+  }
+  .migas a {
+    display: inline-block;
+    padding-block: 0.25rem;
+  }
+  .ficha__cabecera h1 {
+    font-size: clamp(1.8rem, 4.5vw, 2.75rem);
+    max-width: 30ch;
+  }
+  .ficha__datos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 2.5rem;
+    margin: 1.5rem 0 1rem;
+  }
+  .ficha__datos dt {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--c-texto-sec);
+  }
+  .ficha__datos dd {
+    margin: 0;
+    font-weight: 500;
+  }
+  .ficha__etiquetas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    padding: 0;
+    margin: 0 0 2rem;
+    list-style: none;
+  }
+  .ficha__cuerpo {
+    display: grid;
+    gap: 2rem;
+  }
+  .ficha__imagen {
+    margin: 0;
+  }
+  .ficha__imagen img {
+    width: 100%;
+    border-radius: var(--radio);
+    border: 1px solid var(--c-borde);
+  }
+  figcaption {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--c-texto-sec);
+  }
+  .ficha__texto h2 {
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .ficha__texto h2::before {
+    content: '';
+    width: 0.6rem;
+    height: 0.6rem;
+    border: 2px solid var(--c-linea);
+    border-radius: 50%;
+  }
+  .ficha__texto section + section {
+    margin-top: 1.75rem;
+  }
+  .galeria {
+    margin-top: 3rem;
+  }
+  .galeria figure {
+    margin: 0;
+  }
+  .galeria img {
+    width: 100%;
+    border-radius: var(--radio);
+  }
+  .ficha__llamada {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 3rem;
+    padding: 1.5rem;
+    border: 1px solid var(--c-borde);
+    border-left: 4px solid var(--ambar);
+    border-radius: var(--radio);
+    background: var(--c-fondo-alt);
+  }
+  .ficha__llamada p {
+    margin: 0;
+    font-family: var(--f-titulos);
+    font-weight: 600;
+    font-size: 1.3rem;
+    color: var(--c-acento);
+  }
+  @media (min-width: 64rem) {
+    .ficha__cuerpo {
+      grid-template-columns: 32rem 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+    .ficha__imagen {
+      position: sticky;
+      top: 1.5rem;
+    }
+  }
+</style>

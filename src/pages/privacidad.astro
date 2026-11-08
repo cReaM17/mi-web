@@ -1,0 +1,45 @@
+---
+import Base from '../layouts/Base.astro';
+import { LEGAL, SEO, SITIO } from '../data/sitio';
+import { conPendientes } from '../lib/texto';
+---
+<Base titulo={SEO.privacidad.titulo} descripcion={SEO.privacidad.descripcion}>
+  <section class="seccion">
+    <div class="contenedor prosa">
+      <span class="antetitulo">Información legal</span>
+      <h1>Política de privacidad</h1>
+      <p><mark class="pendiente">[PENDIENTE: revisar esta política con la gestoría antes de publicarla]</mark></p>
+
+      <h2>1. Responsable del tratamiento</h2>
+      <ul>
+        <li><strong>Responsable:</strong> {LEGAL.titular}</li>
+        <li><strong>NIF:</strong> <span set:html={conPendientes(LEGAL.nif)} /></li>
+        <li><strong>Domicilio:</strong> <span set:html={conPendientes(LEGAL.domicilio)} /></li>
+        <li><strong>Email:</strong> <a href={`mailto:${SITIO.email}`}>{SITIO.email}</a></li>
+      </ul>
+
+      <h2>2. Qué datos se tratan y para qué</h2>
+      <p>Solo se tratan los datos que tú envías por el formulario de contacto o por email: nombre, email, teléfono (si lo indicas), tipo de proyecto, municipio y el contenido de tu mensaje. Se usan únicamente para responder a tu solicitud, preparar un presupuesto y, si llegamos a un acuerdo, gestionar el encargo.</p>
+
+      <h2>3. Base legal</h2>
+      <p>El consentimiento que das al marcar la casilla del formulario (artículo 6.1.a del Reglamento General de Protección de Datos, RGPD) y, si pides un presupuesto, la aplicación de medidas precontractuales a petición tuya (artículo 6.1.b del RGPD).</p>
+
+      <h2>4. Cuánto tiempo se conservan</h2>
+      <p>Mientras dure la relación y, después, durante los plazos que exija la ley. Si no llega a haber encargo, los datos se borran en un plazo máximo de un año desde el último contacto.</p>
+
+      <h2>5. Quién más tiene acceso</h2>
+      <p>No se ceden datos a terceros salvo obligación legal. Para que la web funcione intervienen estos proveedores, que actúan como encargados del tratamiento:</p>
+      <ul>
+        <li><strong>Cloudflare</strong> (alojamiento de la web y, si está activada, estadística de visitas sin cookies). Puede implicar transferencias internacionales amparadas en las garantías previstas por el RGPD.</li>
+        <li><strong>Web3Forms</strong> (envío del formulario de contacto al email del responsable). <mark class="pendiente">[PENDIENTE: confirmar el proveedor del formulario y su ubicación de datos]</mark></li>
+        <li><strong>Google</strong> (servicio de correo electrónico Gmail en el que se reciben los mensajes).</li>
+      </ul>
+
+      <h2>6. Tus derechos</h2>
+      <p>Puedes ejercer tus derechos de acceso, rectificación, supresión, oposición, limitación del tratamiento y portabilidad, y retirar tu consentimiento en cualquier momento, escribiendo a <a href={`mailto:${SITIO.email}`}>{SITIO.email}</a>. Si consideras que no se han atendido correctamente, puedes reclamar ante la <a href="https://www.aepd.es/" rel="noopener">Agencia Española de Protección de Datos</a>.</p>
+
+      <h2>7. Cookies y almacenamiento local</h2>
+      <p>Esta web no instala cookies propias ni de terceros. La estadística de visitas, si está activada, usa Cloudflare Web Analytics, que no utiliza cookies ni rastrea a los visitantes entre sitios. La preferencia de modo claro u oscuro se guarda en el almacenamiento local de tu navegador y nunca se envía a ningún servidor; puedes borrarla desde la configuración de tu navegador.</p>
+    </div>
+  </section>
+</Base>

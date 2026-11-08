@@ -1,0 +1,90 @@
+---
+import Logo from './Logo.astro';
+import { SITIO } from '../data/sitio';
+const anio = new Date().getFullYear();
+---
+<footer class="pie">
+  <div class="contenedor pie__rejilla">
+    <div>
+      <Logo class="pie__logo" />
+      <p class="pie__nombre">{SITIO.nombre}</p>
+      <p>{SITIO.profesion}<br />Colegiado COITT n.º {SITIO.colegiacion.coitt} · COIT n.º {SITIO.colegiacion.coit}</p>
+    </div>
+    <div>
+      <h2 class="pie__titulo">Contacto</h2>
+      <ul class="pie__lista">
+        <li><a href={SITIO.telefonoEnlace}>{SITIO.telefono}</a></li>
+        <li><a href={`mailto:${SITIO.email}`}>{SITIO.email}</a></li>
+        {SITIO.redes.map((r) => <li><a href={r.url} rel="me noopener">{r.nombre}</a></li>)}
+        <li>{SITIO.zona}</li>
+      </ul>
+    </div>
+    <nav aria-label="Pie de página">
+      <h2 class="pie__titulo">Web</h2>
+      <ul class="pie__lista">
+        <li><a href="/servicios/">Servicios</a></li>
+        <li><a href="/proyectos/">Proyectos</a></li>
+        <li><a href="/sobre-mi/">Sobre mí</a></li>
+        <li><a href="/contacto/">Contacto</a></li>
+        <li><a href="/aviso-legal/">Aviso legal</a></li>
+        <li><a href="/privacidad/">Política de privacidad</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="contenedor pie__legal">
+    <p>© {anio} {SITIO.nombre}. Esta web no usa cookies.</p>
+  </div>
+</footer>
+
+<style>
+  .pie {
+    margin-top: auto;
+    background: var(--c-fondo-alt);
+    border-top: 1px solid var(--c-borde);
+    color: var(--c-texto-sec);
+    font-size: 0.95rem;
+  }
+  .pie a {
+    color: var(--c-texto);
+  }
+  .pie__rejilla {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+    padding-block: 3rem 2rem;
+  }
+  .pie__nombre {
+    margin: 0.5rem 0 0.25rem;
+    font-family: var(--f-titulos);
+    font-weight: 700;
+    color: var(--c-acento);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .pie__titulo {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--c-texto-sec);
+  }
+  .pie__lista {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .pie__lista li {
+    padding-block: 0.3rem;
+  }
+  .pie__lista a {
+    display: inline-block;
+    padding-block: 0.2rem;
+  }
+  .pie__legal {
+    border-top: 1px solid var(--c-borde);
+    padding-block: 1.25rem;
+    font-size: 0.875rem;
+  }
+  .pie__legal p {
+    margin: 0;
+  }
+</style>

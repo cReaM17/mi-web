@@ -1,0 +1,80 @@
+---
+import Image from './Imagen.astro';
+import { INFO_CATEGORIA } from '../data/categorias';
+import type { Servicio } from '../data/sitio';
+
+interface Props {
+  servicio: Servicio;
+  /** 'resumen' en la portada; 'completo' en la página de servicios. */
+  modo?: 'resumen' | 'completo';
+  /** Número de proyectos publicados de su categoría (para enlazarlos). */
+  numProyectos?: number;
+}
+const { servicio, modo = 'resumen', numProyectos = 0 } = Astro.props;
+const info = INFO_CATEGORIA[servicio.categoria];
+---
+{
+  modo === 'resumen' ? (
+    <article class="tarjeta tarjeta--enlace">
+      <Image
+        src={info.ilustracion}
+        alt=""
+        class="tarjeta__imagen"
+        widths={[400, 640]}
+        sizes="(min-width: 72rem) 22rem, (min-width: 40rem) 45vw, 92vw"
+      />
+      <div class="tarjeta__cuerpo">
+        <h3>
+          <a href={`/servicios/#${servicio.id}`}>{servicio.titulo}</a>
+        </h3>
+        <p>{servicio.texto}</p>
+      </div>
+    </article>
+  ) : (
+    <article class="servicio" id={servicio.id}>
+      <Image
+        src={info.ilustracion}
+        alt={info.altIlustracion}
+        class="servicio__imagen"
+        widths={[480, 720, 960]}
+        sizes="(min-width: 60rem) 28rem, 92vw"
+      />
+      <div>
+        <h2>{servicio.titulo}</h2>
+        <p>{servicio.texto}</p>
+        <p class="servicio__quien">
+          <strong>Para quién:</strong> {servicio.paraQuien}
+        </p>
+        {numProyectos > 0 && (
+          <a class="servicio__enlace" href={`/proyectos/?categoria=${info.slug}`}>
+            Ver {numProyectos === 1 ? 'el proyecto' : `los ${numProyectos} proyectos`} de {servicio.categoria}
+          </a>
+        )}
+      </div>
+    </article>
+  )
+}
+
+<style>
+  .servicio {
+    display: grid;
+    gap: 1.5rem;
+    align-items: center;
+    padding-block: 2.5rem;
+    border-top: 1px solid var(--c-borde);
+  }
+  .servicio__imagen {
+    width: 100%;
+    border-radius: var(--radio);
+    border: 1px solid var(--c-borde);
+  }
+  .servicio__quien {
+    color: var(--c-texto-sec);
+  }
+  @media (min-width: 60rem) {
+    .servicio {
+      grid-template-columns: 28rem 1fr;
+      gap: 3rem;
+    }
+  }
+</style>

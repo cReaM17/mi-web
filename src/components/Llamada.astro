@@ -1,0 +1,54 @@
+---
+import { LLAMADA } from '../data/sitio';
+interface Props {
+  titulo?: string;
+  texto?: string;
+}
+const { titulo = LLAMADA.titulo, texto = LLAMADA.texto } = Astro.props;
+---
+<section class="llamada" aria-labelledby="llamada-titulo">
+  <div class="contenedor llamada__caja">
+    <div>
+      <h2 id="llamada-titulo">{titulo}</h2>
+      {texto && <p>{texto}</p>}
+    </div>
+    <a class="boton boton--secundario llamada__boton" href="/contacto/">{LLAMADA.boton}</a>
+  </div>
+</section>
+
+<style>
+  .llamada {
+    padding-block: clamp(3rem, 7vw, 4.5rem);
+    background: var(--azul-dcm);
+    color: #e7edf3;
+  }
+  :global([data-theme='dark']) .llamada {
+    background: var(--c-superficie);
+  }
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme='light'])) .llamada {
+      background: var(--c-superficie);
+    }
+  }
+  .llamada__caja {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem 3rem;
+  }
+  .llamada h2 {
+    color: #ffffff;
+    margin-bottom: 0.4em;
+  }
+  .llamada p {
+    margin: 0;
+    max-width: 38rem;
+    font-size: 1.1rem;
+    color: #e7edf3;
+  }
+  .llamada__boton {
+    --c-btn2-fondo: var(--ambar);
+    --c-btn2-texto: #0b1a2c;
+  }
+</style>

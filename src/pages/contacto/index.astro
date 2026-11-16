@@ -1,0 +1,73 @@
+---
+import Base from '../../layouts/Base.astro';
+import ContactForm from '../../components/ContactForm.astro';
+import { LLAMADA, SEO, SITIO } from '../../data/sitio';
+import { conPendientes } from '../../lib/texto';
+---
+<Base titulo={SEO.contacto.titulo} descripcion={SEO.contacto.descripcion}>
+  <section class="seccion">
+    <div class="contenedor contacto">
+      <div>
+        <span class="antetitulo">Contacto</span>
+        <h1>{LLAMADA.titulo}</h1>
+        <p class="entradilla">{LLAMADA.texto}</p>
+        <dl class="datos">
+          <div><dt>Teléfono</dt><dd><a href={SITIO.telefonoEnlace}>{SITIO.telefono}</a></dd></div>
+          <div><dt>Email</dt><dd><a href={`mailto:${SITIO.email}`}>{SITIO.email}</a></dd></div>
+          <div>
+            <dt>LinkedIn</dt>
+            <dd>
+              {
+                SITIO.redes.find((r) => r.nombre === 'LinkedIn') ? (
+                  <a href={SITIO.redes.find((r) => r.nombre === 'LinkedIn')!.url} rel="me noopener">Perfil de LinkedIn</a>
+                ) : (
+                  <span set:html={conPendientes(SITIO.linkedinPendiente)} />
+                )
+              }
+            </dd>
+          </div>
+          <div><dt>Zona de trabajo</dt><dd>{SITIO.zona}</dd></div>
+        </dl>
+      </div>
+      <div>
+        <h2>Pide presupuesto</h2>
+        <ContactForm />
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .contacto {
+    display: grid;
+    gap: 3rem;
+  }
+  .contacto h2 {
+    font-size: 1.6rem;
+  }
+  .datos {
+    display: grid;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  .datos dt {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--c-texto-sec);
+  }
+  .datos dd {
+    margin: 0;
+    font-weight: 500;
+  }
+  .datos a {
+    display: inline-block;
+    padding-block: 0.2rem;
+  }
+  @media (min-width: 60rem) {
+    .contacto {
+      grid-template-columns: 2fr 3fr;
+      gap: 4rem;
+    }
+  }
+</style>

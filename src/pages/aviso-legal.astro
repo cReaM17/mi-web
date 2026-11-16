@@ -1,0 +1,53 @@
+---
+import Base from '../layouts/Base.astro';
+import { LEGAL, SEO, SITIO } from '../data/sitio';
+import { conPendientes } from '../lib/texto';
+---
+<Base titulo={SEO.avisoLegal.titulo} descripcion={SEO.avisoLegal.descripcion}>
+  <section class="seccion">
+    <div class="contenedor prosa">
+      <span class="antetitulo">Información legal</span>
+      <h1>Aviso legal</h1>
+      <p><mark class="pendiente">[PENDIENTE: revisar este aviso legal con la gestoría antes de publicarlo]</mark></p>
+
+      <h2>1. Datos identificativos</h2>
+      <p>En cumplimiento del artículo 10 de la Ley 34/2002, de Servicios de la Sociedad de la Información y de Comercio Electrónico (LSSI-CE), se informa de los datos del titular de esta web:</p>
+      <ul>
+        <li><strong>Titular:</strong> {LEGAL.titular}</li>
+        <li><strong>NIF:</strong> <span set:html={conPendientes(LEGAL.nif)} /></li>
+        <li><strong>Domicilio profesional:</strong> <span set:html={conPendientes(LEGAL.domicilio)} /></li>
+        <li><strong>Email:</strong> <a href={`mailto:${SITIO.email}`}>{SITIO.email}</a></li>
+        <li><strong>Teléfono:</strong> <a href={SITIO.telefonoEnlace}>{SITIO.telefono}</a></li>
+      </ul>
+
+      <h2>2. Profesión regulada</h2>
+      <ul>
+        {LEGAL.colegios.map((c) => <li><strong>Colegio profesional:</strong> {c.nombre}, n.º de colegiado {c.numero}.</li>)}
+        <li><strong>Títulos académicos:</strong> {LEGAL.titulos.join('; ')}. Expedidos en España.</li>
+        <li>
+          <strong>Normas profesionales aplicables:</strong> estatutos y código deontológico del
+          {' '}<a href={LEGAL.colegios[0]!.url} rel="noopener">COITT</a> y del
+          {' '}<a href={LEGAL.colegios[1]!.url} rel="noopener">COIT</a>, que pueden consultarse en sus webs.
+        </li>
+      </ul>
+
+      <h2>3. Objeto y condiciones de uso</h2>
+      <p>Esta web informa sobre los servicios profesionales de ingeniería de su titular y facilita el contacto con él. El acceso es gratuito y no exige registro. Quien la visita se compromete a hacer un uso adecuado de sus contenidos, conforme a la ley y a este aviso.</p>
+
+      <h2>4. Propiedad intelectual e industrial</h2>
+      <p>Los textos, ilustraciones, logotipo y diseño de esta web pertenecen a su titular, salvo que se indique otra cosa. No está permitida su reproducción, distribución o transformación con fines comerciales sin autorización previa por escrito. Los proyectos se describen sin datos de clientes ni direcciones exactas, para respetar su confidencialidad.</p>
+
+      <h2>5. Responsabilidad</h2>
+      <p>La información de esta web es orientativa y no sustituye a un estudio técnico de cada caso. El titular procura que los contenidos sean correctos y estén actualizados, pero no responde de los daños derivados de su uso ni de interrupciones del servicio ajenas a su control.</p>
+
+      <h2>6. Enlaces externos</h2>
+      <p>Esta web puede incluir enlaces a sitios de terceros (por ejemplo, los colegios profesionales). El titular no controla esos sitios ni responde de sus contenidos.</p>
+
+      <h2>7. Cookies</h2>
+      <p>Esta web no utiliza cookies. El botón de modo claro u oscuro guarda tu preferencia en el almacenamiento local de tu navegador, que no se envía a ningún servidor. Más información en la <a href="/privacidad/">política de privacidad</a>.</p>
+
+      <h2>8. Legislación aplicable</h2>
+      <p>Este aviso legal se rige por la legislación española. Para cualquier controversia, las partes se someten a los juzgados y tribunales que correspondan conforme a la normativa aplicable.</p>
+    </div>
+  </section>
+</Base>

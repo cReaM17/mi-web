@@ -1,0 +1,61 @@
+---
+import Base from '../layouts/Base.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import Llamada from '../components/Llamada.astro';
+import { SERVICIOS, SEO, SITIO } from '../data/sitio';
+import { proyectosOrdenados } from '../lib/proyectos';
+
+const proyectos = await proyectosOrdenados();
+const contar = (cat: string) => proyectos.filter((p) => p.data.categoria === cat).length;
+const site = Astro.site ?? new URL('https://mi-web.pages.dev');
+const jsonLd = SERVICIOS.map((s) => ({
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: s.titulo,
+  description: s.texto,
+  audience: { '@type': 'Audience', audienceType: s.paraQuien },
+  areaServed: SITIO.zonaLista,
+  provider: { '@id': new URL('/#servicio', site).href },
+  url: new URL(`/servicios/#${s.id}`, site).href,
+}));
+---
+<Base titulo={SEO.servicios.titulo} descripcion={SEO.servicios.descripcion} jsonLd={jsonLd}>
+  <section class="seccion">
+    <div class="contenedor">
+      <span class="antetitulo">Servicios</span>
+      <h1>Proyectos, visado y tramitación</h1>
+      <p class="entradilla">
+        Me encargo del proyecto y de su tramitación con el colegio, la distribuidora y el ayuntamiento, y te
+        explico cada paso con claridad. Trabajo en la {SITIO.zona}.
+      </p>
+      <nav aria-label="Servicios en esta página" class="indice">
+        <ul>
+          {SERVICIOS.map((s) => <li><a href={`#${s.id}`}>{s.titulo}</a></li>)}
+        </ul>
+      </nav>
+      {SERVICIOS.map((s) => <ServiceCard servicio={s} modo="completo" numProyectos={contar(s.categoria)} />)}
+    </div>
+  </section>
+  <Llamada />
+</Base>
+
+<style>
+  .indice ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0;
+    margin: 2rem 0;
+    list-style: none;
+  }
+  .indice a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0.4rem 0.9rem;
+    border: 1px solid var(--c-borde);
+    border-radius: 999px;
+    text-decoration: none;
+    font-size: 0.95rem;
+  }
+</style>

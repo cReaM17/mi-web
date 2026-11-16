@@ -1,0 +1,176 @@
+---
+/**
+ * Formulario de contacto. Envía los datos al servicio definido en
+ * PUBLIC_FORM_ENDPOINT (Web3Forms por defecto; también vale Formspree).
+ * Si no está configurado, se muestra un botón de email en su lugar.
+ */
+import { SERVICIOS, SITIO } from '../data/sitio';
+
+const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT?.trim() ?? '';
+const accessKey = import.meta.env.PUBLIC_FORM_ACCESS_KEY?.trim() ?? '';
+const esWeb3Forms = endpoint.includes('web3forms.com');
+const esFormspree = endpoint.includes('formspree.io');
+const configurado = /^https:\/\//.test(endpoint) && (!esWeb3Forms || accessKey !== '');
+const site = Astro.site ?? new URL('https://mi-web.pages.dev');
+const gracias = new URL('/contacto/gracias/', site).href;
+const honeypot = esFormspree ? '_gotcha' : 'botcheck';
+const asuntoMail = encodeURIComponent('Solicitud de presupuesto desde la web');
+---
+{
+  configurado ? (
+    <form class="formulario" action={endpoint} method="POST" accept-charset="UTF-8">
+      {esWeb3Forms && (
+        <>
+          <input type="hidden" name="access_key" value={accessKey} />
+          <input type="hidden" name="subject" value="Nueva solicitud desde la web DCM" />
+          <input type="hidden" name="from_name" value="Web DCM" />
+          <input type="hidden" name="redirect" value={gracias} />
+        </>
+      )}
+      {esFormspree && <input type="hidden" name="_subject" value="Nueva solicitud desde la web DCM" />}
+
+      <p class="formulario__nota">Los campos marcados con * son obligatorios.</p>
+
+      <div class="campo">
+        <label for="f-nombre">Nombre *</label>
+        <input id="f-nombre" name="nombre" type="text" autocomplete="name" required maxlength="120" />
+      </div>
+      <div class="campo">
+        <label for="f-email">Email *</label>
+        <input id="f-email" name="email" type="email" autocomplete="email" required maxlength="160" />
+      </div>
+      <div class="campo">
+        <label for="f-telefono">Teléfono (opcional)</label>
+        <input id="f-telefono" name="telefono" type="tel" autocomplete="tel" maxlength="30" />
+      </div>
+      <div class="campo">
+        <label for="f-tipo">Tipo de proyecto *</label>
+        <select id="f-tipo" name="tipo_de_proyecto" required>
+          <option value="">Elige una opción</option>
+          {SERVICIOS.map((s) => <option value={s.titulo}>{s.titulo}</option>)}
+          <option value="Otro">Otro</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label for="f-municipio">Municipio *</label>
+        <input id="f-municipio" name="municipio" type="text" autocomplete="address-level2" required maxlength="120" />
+      </div>
+      <div class="campo campo--ancho">
+        <label for="f-mensaje">Mensaje *</label>
+        <textarea id="f-mensaje" name="mensaje" rows="6" required maxlength="5000" aria-describedby="f-mensaje-ayuda"></textarea>
+        <p id="f-mensaje-ayuda" class="campo__ayuda">Cuéntame qué necesitas, para cuándo y cualquier dato útil (potencia, superficie, tipo de local…).</p>
+      </div>
+
+      <div class="trampa" aria-hidden="true">
+        <label for="f-trampa">No rellenes este campo</label>
+        <input id="f-trampa" type="checkbox" name={honeypot} tabindex="-1" autocomplete="off" />
+      </div>
+
+      <div class="campo campo--ancho campo--casilla">
+        <input id="f-privacidad" name="acepta_privacidad" type="checkbox" value="Sí" required />
+        <label for="f-privacidad">
+          He leído y acepto la <a href="/privacidad/">política de privacidad</a>. *
+        </label>
+      </div>
+      <p class="formulario__legal campo--ancho">
+        Responsable: {SITIO.nombre}. Finalidad: responder a tu solicitud. Puedes ejercer tus derechos de acceso,
+        rectificación y supresión escribiendo a {SITIO.email}.
+      </p>
+      <div class="campo--ancho">
+        <button class="boton" type="submit">Enviar solicitud</button>
+      </div>
+    </form>
+  ) : (
+    <div class="sin-formulario">
+      <p>Escríbeme un email contándome qué necesitas, para cuándo y en qué municipio. Te respondo con una propuesta.</p>
+      <div class="botones">
+        <a class="boton" href={`mailto:${SITIO.email}?subject=${asuntoMail}`}>Escríbeme un email</a>
+        <a class="boton boton--secundario" href={SITIO.telefonoEnlace}>Llamar al {SITIO.telefono}</a>
+      </div>
+    </div>
+  )
+}
+
+<style>
+  .formulario {
+    display: grid;
+    gap: 1.25rem 1.5rem;
+  }
+  @media (min-width: 40rem) {
+    .formulario {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .formulario__nota,
+  .campo--ancho,
+  .formulario__legal {
+    grid-column: 1 / -1;
+  }
+  .formulario__nota {
+    margin: 0;
+    color: var(--c-texto-sec);
+    font-size: 0.9rem;
+  }
+  .campo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  .campo label {
+    font-weight: 600;
+  }
+  .campo input,
+  .campo select,
+  .campo textarea {
+    width: 100%;
+    min-height: 2.875rem;
+    padding: 0.6rem 0.8rem;
+    border: 1px solid var(--c-texto-sec);
+    border-radius: 0.5rem;
+    background: var(--c-superficie);
+    color: var(--c-texto);
+    font: inherit;
+  }
+  .campo textarea {
+    resize: vertical;
+  }
+  .campo__ayuda {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--c-texto-sec);
+  }
+  .campo--casilla {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  .campo--casilla input {
+    width: 1.5rem;
+    min-height: 1.5rem;
+    height: 1.5rem;
+    margin: 0.1rem 0 0;
+    flex: none;
+    accent-color: var(--azul-dcm);
+  }
+  .campo--casilla label {
+    font-weight: 400;
+  }
+  .formulario__legal {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--c-texto-sec);
+  }
+  .trampa {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  .sin-formulario {
+    padding: 1.5rem;
+    border: 1px solid var(--c-borde);
+    border-radius: var(--radio);
+    background: var(--c-fondo-alt);
+  }
+</style>

@@ -1,0 +1,140 @@
+---
+import Logo from './Logo.astro';
+import ThemeToggle from './ThemeToggle.astro';
+import { SITIO } from '../data/sitio';
+
+const enlaces = [
+  { href: '/servicios/', texto: 'Servicios' },
+  { href: '/proyectos/', texto: 'Proyectos' },
+  { href: '/sobre-mi/', texto: 'Sobre mí' },
+  { href: '/contacto/', texto: 'Contacto' },
+];
+const ruta = Astro.url.pathname;
+const actual = (href: string) => ruta === href || ruta.startsWith(href);
+---
+<header class="cabecera">
+  <div class="contenedor cabecera__fila">
+    <a href="/" class="cabecera__marca">
+      <Logo class="cabecera__logo" />
+      <span class="cabecera__nombre">
+        <span class="cabecera__persona">{SITIO.nombre}</span>
+        <span class="cabecera__profesion">{SITIO.profesion}</span>
+      </span>
+    </a>
+    <nav class="cabecera__nav" aria-label="Principal">
+      <ul>
+        {
+          enlaces.map((e) => (
+            <li>
+              <a href={e.href} aria-current={actual(e.href) ? 'page' : undefined}>
+                {e.texto}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    <ThemeToggle />
+  </div>
+</header>
+
+<style>
+  .cabecera {
+    border-bottom: 1px solid var(--c-borde);
+    background: var(--c-fondo);
+  }
+  .cabecera__fila {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      'marca tema'
+      'nav nav';
+    align-items: center;
+    gap: 0.5rem 1rem;
+    padding-block: 0.75rem;
+  }
+  .cabecera__marca {
+    grid-area: marca;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: var(--c-texto);
+    min-width: 0;
+  }
+  .cabecera__nombre {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+    min-width: 0;
+  }
+  .cabecera__persona {
+    white-space: nowrap;
+    font-family: var(--f-titulos);
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--c-acento);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .cabecera__profesion {
+    white-space: nowrap;
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--c-texto-sec);
+  }
+  .cabecera__nav {
+    grid-area: nav;
+  }
+  .cabecera__nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.1rem;
+    margin: 0 -0.5rem;
+    padding: 0;
+    list-style: none;
+  }
+  .cabecera__nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.975rem;
+    border-radius: 999px;
+    color: var(--c-texto);
+    font-weight: 500;
+    text-decoration: none;
+  }
+  .cabecera__nav a:hover {
+    background: var(--c-fondo-alt);
+  }
+  .cabecera__nav a[aria-current='page'] {
+    color: var(--c-acento);
+    box-shadow: inset 0 -2px 0 var(--ambar);
+    border-radius: 0;
+  }
+  .cabecera :global(.tema) {
+    grid-area: tema;
+  }
+  @media (max-width: 23.5rem) {
+    .cabecera__profesion {
+      display: none;
+    }
+  }
+  @media (min-width: 60rem) {
+    .cabecera__fila {
+      grid-template-columns: auto 1fr auto;
+      grid-template-areas: 'marca nav tema';
+    }
+    .cabecera__nav ul {
+      justify-content: flex-end;
+      gap: 0.25rem;
+      margin: 0;
+    }
+    .cabecera__nav a {
+      padding-inline: 0.7rem;
+      font-size: 1rem;
+    }
+  }
+</style>

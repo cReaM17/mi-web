@@ -1,0 +1,9 @@
+---
+/** Inserta datos estructurados schema.org (JSON-LD). No es JavaScript ejecutable. */
+interface Props {
+  datos: Record<string, unknown> | Record<string, unknown>[];
+}
+const { datos } = Astro.props;
+const json = JSON.stringify(datos).replace(/</g, '\\u003c');
+---
+<script type="application/ld+json" is:inline set:html={json} />

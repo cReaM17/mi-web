@@ -1,0 +1,124 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import Llamada from '../../components/Llamada.astro';
+import { SEO } from '../../data/sitio';
+import { CATEGORIAS, INFO_CATEGORIA } from '../../data/categorias';
+import { proyectosOrdenados } from '../../lib/proyectos';
+
+const proyectos = await proyectosOrdenados();
+const categorias = CATEGORIAS.filter((c) => proyectos.some((p) => p.data.categoria === c));
+---
+<Base titulo={SEO.proyectos.titulo} descripcion={SEO.proyectos.descripcion}>
+  <section class="seccion">
+    <div class="contenedor">
+      <span class="antetitulo">Proyectos</span>
+      <h1>Proyectos reales, con su reto, su solución y su resultado</h1>
+      <p class="entradilla">
+        Una selección de trabajos de baja y media tensión e ICT. Los clientes y las direcciones exactas se
+        mantienen en confidencialidad.
+      </p>
+
+      <div class="filtro" data-filtro hidden>
+        <p class="filtro__titulo" id="filtro-titulo">Filtrar por categoría</p>
+        <div class="filtro__botones" role="group" aria-labelledby="filtro-titulo">
+          <button type="button" class="filtro__boton" data-valor="" aria-pressed="true">Todas</button>
+          {
+            categorias.map((c) => (
+              <button type="button" class="filtro__boton" data-valor={INFO_CATEGORIA[c].slug} data-categoria={c} aria-pressed="false">
+                {c}
+              </button>
+            ))
+          }
+        </div>
+        <p class="filtro__estado" role="status" aria-live="polite" data-filtro-estado></p>
+      </div>
+
+      <ul class="rejilla" data-proyectos>
+        {
+          proyectos.map((p, i) => (
+            <li data-categoria={INFO_CATEGORIA[p.data.categoria].slug}>
+              <ProjectCard proyecto={p} prioridad={i < 2} nivel="h2" />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+  <Llamada />
+</Base>
+
+<script>
+  const filtro = document.querySelector<HTMLElement>('[data-filtro]');
+  const lista = document.querySelector<HTMLElement>('[data-proyectos]');
+  const estado = document.querySelector<HTMLElement>('[data-filtro-estado]');
+  if (filtro && lista && estado) {
+    const botones = Array.from(filtro.querySelectorAll<HTMLButtonElement>('button[data-valor]'));
+    const items = Array.from(lista.querySelectorAll<HTMLLIElement>('li[data-categoria]'));
+
+    const aplicar = (valor: string, anunciar: boolean) => {
+      let visibles = 0;
+      for (const li of items) {
+        const ver = !valor || li.dataset.categoria === valor;
+        li.hidden = !ver;
+        if (ver) visibles++;
+      }
+      for (const b of botones) b.setAttribute('aria-pressed', String(b.dataset.valor === valor));
+      const url = new URL(location.href);
+      if (valor) url.searchParams.set('categoria', valor);
+      else url.searchParams.delete('categoria');
+      history.replaceState(null, '', url);
+      if (anunciar) {
+        estado.textContent = `${visibles} ${visibles === 1 ? 'proyecto' : 'proyectos'}`;
+      }
+    };
+
+    for (const b of botones) b.addEventListener('click', () => aplicar(b.dataset.valor ?? '', true));
+    filtro.hidden = false;
+    const inicial = new URL(location.href).searchParams.get('categoria') ?? '';
+    const valido = botones.some((b) => b.dataset.valor === inicial);
+    aplicar(valido ? inicial : '', false);
+  }
+</script>
+
+<style>
+  .filtro {
+    margin: 2rem 0;
+  }
+  .filtro[hidden] {
+    display: none;
+  }
+  .filtro__titulo {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  .filtro__botones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .filtro__boton {
+    min-height: 2.75rem;
+    padding: 0.4rem 1rem;
+    border: 1px solid var(--c-borde);
+    border-radius: 999px;
+    background: var(--c-superficie);
+    color: var(--c-texto);
+    font: 500 0.95rem/1.2 var(--f-texto);
+    cursor: pointer;
+  }
+  .filtro__boton[aria-pressed='true'] {
+    background: var(--c-btn-fondo);
+    border-color: var(--c-btn-fondo);
+    color: var(--c-btn-texto);
+  }
+  .filtro__estado {
+    margin: 0.75rem 0 0;
+    color: var(--c-texto-sec);
+    font-size: 0.9rem;
+    min-height: 1.5em;
+  }
+  [data-proyectos] li[hidden] {
+    display: none;
+  }
+</style>

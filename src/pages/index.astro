@@ -1,0 +1,100 @@
+---
+import Base from '../layouts/Base.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import Llamada from '../components/Llamada.astro';
+import { PORTADA, SERVICIOS, SEO, SITIO } from '../data/sitio';
+import { proyectosOrdenados } from '../lib/proyectos';
+
+const destacados = (await proyectosOrdenados()).filter((p) => p.data.destacado);
+---
+<Base titulo={SEO.inicio.titulo} descripcion={SEO.inicio.descripcion}>
+  <section class="portada">
+    <div class="contenedor">
+      <span class="antetitulo">{SITIO.profesion} · {SITIO.ciudad}</span>
+      <h1>{PORTADA.titular}</h1>
+      <p class="entradilla">{PORTADA.subtitulo}</p>
+      <div class="botones">
+        <a class="boton" href="/contacto/">Pide presupuesto</a>
+        <a class="boton boton--secundario" href="/proyectos/">Ver proyectos</a>
+      </div>
+      <ul class="confianza" aria-label="Por qué confiar">
+        {PORTADA.confianza.map((c) => <li>{c}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="seccion seccion--alt" aria-labelledby="servicios-titulo">
+    <div class="contenedor">
+      <span class="circuito" aria-hidden="true"></span>
+      <h2 id="servicios-titulo">Servicios</h2>
+      <p class="entradilla">Del cálculo al visado y la tramitación con el colegio, la distribuidora y el ayuntamiento.</p>
+      <ul class="rejilla">
+        {SERVICIOS.map((s) => <li><ServiceCard servicio={s} /></li>)}
+      </ul>
+      <p><a href="/servicios/">Ver todos los servicios en detalle</a></p>
+    </div>
+  </section>
+
+  {
+    destacados.length > 0 && (
+      <section class="seccion" aria-labelledby="destacados-titulo">
+        <div class="contenedor">
+          <span class="circuito" aria-hidden="true" />
+          <h2 id="destacados-titulo">Proyectos destacados</h2>
+          <ul class="rejilla">
+            {destacados.map((p) => (
+              <li>
+                <ProjectCard proyecto={p} />
+              </li>
+            ))}
+          </ul>
+          <p>
+            <a href="/proyectos/">Ver todos los proyectos</a>
+          </p>
+        </div>
+      </section>
+    )
+  }
+
+  <Llamada />
+</Base>
+
+<style>
+  .portada {
+    padding-block: clamp(3rem, 9vw, 6.5rem) clamp(2.5rem, 6vw, 4rem);
+    background:
+      radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--c-linea) 30%, transparent) 1px, transparent 0) 0 0 / 28px 28px;
+  }
+  .portada h1 {
+    max-width: 22ch;
+  }
+  .portada .entradilla {
+    margin-bottom: 2rem;
+  }
+  .confianza {
+    display: grid;
+    gap: 0.75rem 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+    margin: 3rem 0 0;
+    padding: 1.5rem 0 0;
+    list-style: none;
+    border-top: 1px solid var(--c-borde);
+    color: var(--c-texto-sec);
+    font-size: 0.95rem;
+  }
+  .confianza li {
+    display: flex;
+    gap: 0.6rem;
+    align-items: baseline;
+  }
+  .confianza li::before {
+    content: '';
+    flex: none;
+    width: 0.55rem;
+    height: 0.55rem;
+    border: 2px solid var(--c-linea);
+    border-radius: 50%;
+    transform: translateY(-0.05rem);
+  }
+</style>

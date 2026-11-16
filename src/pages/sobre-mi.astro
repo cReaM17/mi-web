@@ -1,0 +1,118 @@
+---
+import type { ImageMetadata } from 'astro';
+import Base from '../layouts/Base.astro';
+import Imagen from '../components/Imagen.astro';
+import Llamada from '../components/Llamada.astro';
+import { SOBRE_MI, FORMACION, LEGAL, SEO, SITIO } from '../data/sitio';
+
+// Si existe material/retrato.jpg se usa automáticamente; si no, se muestra un aviso de pendiente.
+const retratos = import.meta.glob<{ default: ImageMetadata }>('/material/retrato.{jpg,jpeg,png,webp}', {
+  eager: true,
+});
+const retrato = Object.values(retratos)[0]?.default;
+---
+<Base titulo={SEO.sobreMi.titulo} descripcion={SEO.sobreMi.descripcion} tipo="profile" imagen={retrato} imagenAlt={`Retrato de ${SITIO.nombre}`}>
+  <section class="seccion">
+    <div class="contenedor sobre">
+      <div class="sobre__texto">
+        <span class="antetitulo">Sobre mí</span>
+        <h1>{SITIO.nombre}</h1>
+        <p class="entradilla">{SITIO.profesion} · Colegiado COITT n.º {SITIO.colegiacion.coitt} y COIT n.º {SITIO.colegiacion.coit}</p>
+        {SOBRE_MI.map((p) => <p>{p}</p>)}
+      </div>
+      <figure class="sobre__retrato">
+        {
+          retrato ? (
+            <Imagen
+              src={retrato}
+              alt={`Retrato de ${SITIO.nombre}`}
+              widths={[320, 480, 720]}
+              sizes="(min-width: 60rem) 22rem, 80vw"
+              loading="eager"
+              fetchpriority="high"
+            />
+          ) : (
+            <div class="sobre__hueco">
+              <mark class="pendiente">[PENDIENTE: retrato en material/retrato.jpg]</mark>
+            </div>
+          )
+        }
+      </figure>
+    </div>
+  </section>
+
+  <section class="seccion seccion--alt" aria-labelledby="t-formacion">
+    <div class="contenedor columnas">
+      <div>
+        <span class="circuito" aria-hidden="true"></span>
+        <h2 id="t-formacion">Formación</h2>
+        <ul>
+          {FORMACION.map((f) => <li>{f}</li>)}
+        </ul>
+      </div>
+      <div>
+        <span class="circuito" aria-hidden="true"></span>
+        <h2>Colegiación</h2>
+        <ul>
+          {
+            LEGAL.colegios.map((c) => (
+              <li>
+                <a href={c.url} rel="noopener">{c.nombre}</a>, n.º {c.numero}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div>
+        <span class="circuito" aria-hidden="true"></span>
+        <h2>Zona de trabajo</h2>
+        <ul>
+          {SITIO.zonaLista.map((z) => <li>{z}</li>)}
+        </ul>
+      </div>
+    </div>
+  </section>
+  <Llamada />
+</Base>
+
+<style>
+  .sobre {
+    display: grid;
+    gap: 2.5rem;
+    align-items: start;
+  }
+  .sobre__texto p:not(.entradilla) {
+    max-width: var(--ancho-texto);
+  }
+  .sobre__retrato {
+    margin: 0;
+    max-width: 22rem;
+  }
+  .sobre__retrato :global(img) {
+    width: 100%;
+    border-radius: var(--radio);
+  }
+  .sobre__hueco {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 4 / 5;
+    padding: 1.5rem;
+    border: 2px dashed var(--c-linea);
+    border-radius: var(--radio);
+    text-align: center;
+  }
+  .columnas {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  }
+  .columnas h2 {
+    font-size: 1.4rem;
+  }
+  @media (min-width: 60rem) {
+    .sobre {
+      grid-template-columns: 1fr 22rem;
+      gap: 4rem;
+    }
+  }
+</style>

@@ -1,0 +1,21 @@
+# Compilación y dependencias
+dist/
+.astro/
+node_modules/
+
+# Variables de entorno y secretos (nunca se suben)
+.env
+.env.*
+!.env.example
+
+# Registros y sistema
+npm-debug.log*
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# Informes temporales de comprobaciones
+lychee-out.md
+audit.json

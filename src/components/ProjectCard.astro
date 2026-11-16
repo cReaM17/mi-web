@@ -1,0 +1,35 @@
+---
+import Image from './Imagen.astro';
+import { imagenPrincipal, fechaLarga, fechaIso, secciones, type Proyecto } from '../lib/proyectos';
+import { conPendientes, recortar } from '../lib/texto';
+
+interface Props {
+  proyecto: Proyecto;
+  nivel?: 'h2' | 'h3';
+  /** Carga prioritaria (primeras tarjetas visibles). */
+  prioridad?: boolean;
+}
+const { proyecto, prioridad = false, nivel = 'h3' } = Astro.props;
+const Titulo = nivel;
+const { data } = proyecto;
+const img = imagenPrincipal(proyecto);
+const resumen = recortar(secciones(proyecto.body).reto, 150);
+---
+<article class="tarjeta tarjeta--enlace" data-categoria={data.categoria}>
+  <Image
+    src={img.src}
+    alt={img.alt}
+    class="tarjeta__imagen"
+    widths={[400, 640, 960]}
+    sizes="(min-width: 72rem) 22rem, (min-width: 40rem) 45vw, 92vw"
+    loading={prioridad ? 'eager' : 'lazy'}
+    fetchpriority={prioridad ? 'high' : 'auto'}
+  />
+  <div class="tarjeta__cuerpo">
+    <p class="tarjeta__meta">
+      <span>{data.categoria}</span> · <time datetime={fechaIso(data.fecha)}>{fechaLarga(data.fecha)}</time>
+    </p>
+    <Titulo class="tarjeta__titulo"><a href={`/proyectos/${proyecto.id}/`}>{data.titulo}</a></Titulo>
+    <p set:html={conPendientes(resumen)} />
+  </div>
+</article>

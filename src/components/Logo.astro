@@ -1,0 +1,23 @@
+---
+/**
+ * Monograma DCM provisional, dibujado a partir de la tarjeta de visita.
+ * [PENDIENTE: sustituir por el logo oficial en SVG cuando esté disponible]
+ * Usa colores de la marca y se aclara solo en modo oscuro (variables CSS).
+ */
+interface Props {
+  class?: string;
+}
+const { class: clase } = Astro.props;
+---
+<svg class:list={['logo', clase]} viewBox="0 0 220 100" aria-hidden="true" focusable="false">
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path class="logo-trazo" d="M12 10h26a30 30 0 0 1 0 60H12z" stroke-width="11" />
+    <path class="logo-trazo" d="M129 19A29 29 0 1 0 129 61" stroke-width="11" />
+    <path class="logo-trazo" d="M152 70V10l24 34 24-34v62" stroke-width="11" />
+    <path class="logo-circuito" d="M113 31h37" stroke-width="5" />
+    <circle class="logo-circuito" cx="106" cy="31" r="6" stroke-width="5" />
+    <path class="logo-trazo" d="M152 70v10a8 8 0 0 1-8 8H103" stroke-width="5" />
+    <circle class="logo-circuito" cx="96" cy="88" r="6" stroke-width="5" />
+    <circle class="logo-trazo" cx="200" cy="85" r="6" stroke-width="5" />
+  </g>
+</svg>

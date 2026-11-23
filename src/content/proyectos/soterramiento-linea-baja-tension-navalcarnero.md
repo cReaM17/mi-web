@@ -6,6 +6,10 @@ categoria: Baja Tensión
 etiquetas: [baja-tension, redes-de-distribucion, soterramiento, i-de]
 enlace: ""
 destacado: false
+imagenes:
+  - src: ./soterramiento-linea-baja-tension-navalcarnero/foto-soterramiento.jpg
+    alt: Postes de madera con líneas eléctricas aéreas junto a farolas de una calle al atardecer
+    origen: banco
 ---
 Reto: Sustituir un tramo de línea aérea de baja tensión de la red de i-DE por un tramo subterráneo en una calle de Navalcarnero (Madrid).
 

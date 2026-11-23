@@ -38,7 +38,7 @@ const categorias = CATEGORIAS.filter((c) => proyectos.some((p) => p.data.categor
         {
           proyectos.map((p, i) => (
             <li data-categoria={INFO_CATEGORIA[p.data.categoria].slug}>
-              <ProjectCard proyecto={p} prioridad={i < 2} nivel="h2" />
+              <ProjectCard proyecto={p} prioridad={i === 0} nivel="h2" />
             </li>
           ))
         }

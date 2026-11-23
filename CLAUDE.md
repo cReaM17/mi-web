@@ -13,6 +13,9 @@ desde la rama `main`.
 - Contenido en Markdown con content collections; sin base de datos, servidor ni CMS.
 - Node: versión fijada en `.node-version` (24 LTS) y en `engines` de `package.json`.
 - Fuente única de textos: `material/contenido-web.md` (y lo que David deje en `buzon/`).
+  Cambios posteriores pedidos por David prevalecen sobre el material (ver la bitácora):
+  p. ej., el párrafo de «Sobre mí» sobre Iberdrola y ENAIRE se quitó a petición suya
+  el 2026-11-23 y no debe volver a añadirse.
 
 ## Comandos
 
@@ -56,9 +59,10 @@ categoria: Baja Tensión   # Baja Tensión | Media Tensión | ICT | Fotovoltaica
 etiquetas: [minusculas-con-guiones]
 enlace: ""                # URL pública o vacío
 destacado: false          # true = aparece en la portada
-imagenes:                 # OPCIONAL. Solo fotos reales aportadas por David
+imagenes:                 # OPCIONAL. Solo fotos aportadas por David
   - src: ./<slug>/foto.jpg
     alt: Descripción de lo que se ve (obligatorio)
+    origen: obra          # obra (foto real) | banco (banco de imágenes → pie «Imagen ilustrativa»)
 ---
 Reto: …
 
@@ -74,19 +78,26 @@ Resultado: …
 
 ## Regla de imágenes (obligatoria)
 
-- **No hay fotos de proyectos.** Mientras David no suba fotos reales, cada ficha y cada
-  servicio usa la **ilustración SVG de su categoría** (`src/assets/ilustraciones/`).
-  Esto es automático: basta con **no** poner `imagenes:` en la ficha.
-- Las fichas nuevas del buzón siguen la misma regla. Nunca uses fotos de bancos de
-  imágenes ni imágenes generadas que parezcan reales.
+- **Prioridad de la imagen principal de una ficha**: 1) foto real de obra aportada por
+  David; 2) foto de banco de imágenes **aportada por David** (Pexels/Unsplash…);
+  3) si no hay ninguna, la **ilustración SVG de su categoría** (`src/assets/ilustraciones/`),
+  que se usa automáticamente cuando la ficha no tiene `imagenes:`.
+- **Pie de foto**: las fotos de bancos de imágenes llevan **siempre** `origen: banco`, y la
+  web les pone el pie discreto **«Imagen ilustrativa»**. Las fotos reales de obra llevan
+  `origen: obra` (valor por defecto) y **nunca** llevan ese pie.
+- No busques ni descargues fotos por tu cuenta: usa solo las que David deje en `material/`
+  o en `buzon/`. Nunca uses imágenes generadas que parezcan fotos reales.
+- Los **servicios** usan siempre la ilustración de su categoría.
+- Al añadir una foto: redúcela a 2400 px de lado mayor como máximo, cópiala a
+  `src/content/proyectos/<slug>/` y declárala en `imagenes:` con `alt` descriptivo
+  (describe lo que se ve, no lo que se supone) y su `origen`. La primera es la principal.
+  Sin datos personales, matrículas ni direcciones visibles.
 - Estilo de las ilustraciones (el del logo): líneas finas con nodos circulares huecos,
   azul `#112E4E` y gris `#748797`, fondo `#F2F5F8`, formato 960×640. Si hace falta una
   categoría nueva, añade su dibujo en `scripts/generar-ilustraciones.py`, su nombre en
   `src/data/categorias-nombres.ts` y su entrada en `src/data/categorias.ts`.
-- Cuando David suba fotos: cópialas a `src/content/proyectos/<slug>/`, decláralas en
-  `imagenes:` con `alt` descriptivo. La primera es la principal.
-- «Sobre mí» usa `material/retrato.jpg` automáticamente si existe; si no, muestra un
-  `[PENDIENTE]`.
+- «Sobre mí» usa `material/retrato.jpg` automáticamente si existe; si no, muestra el
+  logo DCM (componente `Logo.astro`, que se adapta al modo oscuro).
 - Ninguna imagen sin `alt` (las decorativas llevan `alt=""`).
 
 ## Guía de estilo y tono

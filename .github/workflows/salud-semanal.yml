@@ -43,11 +43,15 @@ jobs:
         uses: lycheeverse/lychee-action@v2
         with:
           # Solo enlaces http(s) externos; los internos ya los revisa «npm run check».
+          # --root-dir permite resolver los enlaces que empiezan por «/».
+          # LinkedIn bloquea a los robots (responde 999): se excluye para evitar falsos avisos.
           args: >-
             --no-progress
+            --root-dir ${{ github.workspace }}/dist
             --scheme https --scheme http
             --exclude-loopback
             --exclude 'mi-web\.pages\.dev'
+            --exclude 'linkedin\.com'
             --max-retries 3
             --timeout 30
             --accept '200..=299,403,429'

@@ -18,6 +18,8 @@ import { CATEGORIAS } from './data/categorias-nombres';
  * imagenes:                 (opcional; si falta se usa la ilustración de la categoría)
  *   - src: ./carpeta/foto.jpg
  *     alt: Descripción de la foto
+ *     origen: obra          (obra = foto real del trabajo; banco = foto de banco de imágenes,
+ *                            se muestra con el pie «Imagen ilustrativa»)
  * ---
  * Reto: ...
  * Solución: ...
@@ -41,6 +43,7 @@ const proyectos = defineCollection({
           z.object({
             src: image(),
             alt: z.string().trim().min(5, 'Toda imagen necesita un texto alternativo (alt)'),
+            origen: z.enum(['obra', 'banco']).default('obra'),
           }),
         )
         .default([]),

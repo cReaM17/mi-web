@@ -10,6 +10,7 @@ import {
   relacionados,
   fechaLarga,
   fechaIso,
+  PIE_BANCO,
   type Proyecto,
 } from '../../lib/proyectos';
 import { conPendientes, recortar, sinPendientes } from '../../lib/texto';
@@ -121,6 +122,7 @@ const bloques = [
             fetchpriority="high"
           />
           {img.esIlustracion && <figcaption>Ilustración de la categoría {data.categoria}.</figcaption>}
+          {img.esBanco && <figcaption class="pie-banco">{PIE_BANCO}</figcaption>}
         </figure>
 
         <div class="ficha__texto">
@@ -156,7 +158,10 @@ const bloques = [
                 <li>
                   <figure>
                     <Image src={g.src} alt={g.alt} widths={[400, 800]} sizes="(min-width: 40rem) 30vw, 92vw" />
-                    <figcaption>{g.alt}</figcaption>
+                    <figcaption>
+                      {g.alt}
+                      {g.origen === 'banco' && <span class="pie-banco"> · {PIE_BANCO}</span>}
+                    </figcaption>
                   </figure>
                 </li>
               ))}
@@ -250,6 +255,9 @@ const bloques = [
   }
   .ficha__imagen img {
     width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
     border-radius: var(--radio);
     border: 1px solid var(--c-borde);
   }
@@ -273,6 +281,10 @@ const bloques = [
   }
   .ficha__texto section + section {
     margin-top: 1.75rem;
+  }
+  .pie-banco {
+    font-size: 0.8rem;
+    font-style: italic;
   }
   .galeria {
     margin-top: 3rem;

@@ -6,6 +6,10 @@ categoria: Media Tensión
 etiquetas: [media-tension, centros-de-transformacion, i-de, nuevo-suministro]
 enlace: ""
 destacado: false
+imagenes:
+  - src: ./nuevo-suministro-media-tension-desarrollo-urbanistico/foto-media-tension.jpg
+    alt: Aparamenta de una subestación eléctrica con aisladores de color marrón y pórticos metálicos
+    origen: banco
 ---
 Reto: Conseguir punto de conexión a la red de i-DE para un ámbito urbanístico en Madrid que necesita 2,29 MW a 15 kV.
 

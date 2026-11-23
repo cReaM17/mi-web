@@ -36,12 +36,21 @@ export function secciones(cuerpo: string | undefined): Secciones {
 }
 
 /** Imagen principal: la primera foto de la ficha o, si no hay, la ilustración de su categoría. */
-export function imagenPrincipal(p: Proyecto): { src: ImageMetadata; alt: string; esIlustracion: boolean } {
+export function imagenPrincipal(p: Proyecto): {
+  src: ImageMetadata;
+  alt: string;
+  esIlustracion: boolean;
+  /** true si es una foto de banco de imágenes (lleva el pie «Imagen ilustrativa»). */
+  esBanco: boolean;
+} {
   const primera = p.data.imagenes[0];
-  if (primera) return { src: primera.src, alt: primera.alt, esIlustracion: false };
+  if (primera) return { src: primera.src, alt: primera.alt, esIlustracion: false, esBanco: primera.origen === 'banco' };
   const info = INFO_CATEGORIA[p.data.categoria];
-  return { src: info.ilustracion, alt: info.altIlustracion, esIlustracion: true };
+  return { src: info.ilustracion, alt: info.altIlustracion, esIlustracion: true, esBanco: false };
 }
+
+/** Pie obligatorio de las fotos de bancos de imágenes. */
+export const PIE_BANCO = 'Imagen ilustrativa';
 
 /** Hasta `n` proyectos relacionados: misma categoría y etiquetas en común puntúan más. */
 export function relacionados(actual: Proyecto, todos: Proyecto[], n = 3): Proyecto[] {

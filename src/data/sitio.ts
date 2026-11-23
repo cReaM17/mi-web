@@ -23,8 +23,9 @@ export const SITIO = {
    * Redes sociales. Añade objetos { nombre, url } cuando tengas las URL exactas.
    * Ejemplo: { nombre: 'LinkedIn', url: 'https://www.linkedin.com/in/tu-perfil/' }
    */
-  redes: [] as { nombre: string; url: string }[],
-  linkedinPendiente: '[PENDIENTE: URL exacta del perfil de LinkedIn]',
+  redes: [
+    { nombre: 'LinkedIn', url: 'https://www.linkedin.com/in/david-clemente-mart%C3%ADn-/' },
+  ] as { nombre: string; url: string }[],
 };
 
 export const PORTADA = {
@@ -51,7 +52,6 @@ export const PUBLICO =
 
 export const SOBRE_MI = [
   'Soy David Clemente Martín, ingeniero de Telecomunicación por ICAI (Universidad Pontificia Comillas) y colegiado en el COITT (n.º 16.980) y en el COIT. Desde 2023 trabajo como autónomo redactando y visando proyectos de baja tensión, infraestructuras comunes de telecomunicación (ICT), licencias de actividad y certificados de eficiencia energética.',
-  'Antes de establecerme por mi cuenta trabajé en Iberdrola, en calidad del negocio de distribución eléctrica y en analítica de datos, y fui controlador de tránsito aéreo en ENAIRE. De esas etapas me traigo dos cosas: sé cómo trabaja una distribuidora por dentro y sé que un procedimiento bien hecho evita sorpresas.',
   'Trabajo con particulares, comercios, hostelería, naves industriales e instaladores en la Comunidad de Madrid, Castilla y León y Castilla-La Mancha. Me encargo del proyecto y de su tramitación con el colegio, la distribuidora y el ayuntamiento, y te explico cada paso con claridad.',
 ];
 

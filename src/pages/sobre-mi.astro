@@ -3,9 +3,10 @@ import type { ImageMetadata } from 'astro';
 import Base from '../layouts/Base.astro';
 import Imagen from '../components/Imagen.astro';
 import Llamada from '../components/Llamada.astro';
+import Logo from '../components/Logo.astro';
 import { SOBRE_MI, FORMACION, LEGAL, SEO, SITIO } from '../data/sitio';
 
-// Si existe material/retrato.jpg se usa automáticamente; si no, se muestra un aviso de pendiente.
+// Si existe material/retrato.jpg se usa automáticamente; si no, se muestra el logo DCM.
 const retratos = import.meta.glob<{ default: ImageMetadata }>('/material/retrato.{jpg,jpeg,png,webp}', {
   eager: true,
 });
@@ -33,7 +34,7 @@ const retrato = Object.values(retratos)[0]?.default;
             />
           ) : (
             <div class="sobre__hueco">
-              <mark class="pendiente">[PENDIENTE: retrato en material/retrato.jpg]</mark>
+              <Logo class="sobre__logo" />
             </div>
           )
         }
@@ -96,10 +97,14 @@ const retrato = Object.values(retratos)[0]?.default;
     display: grid;
     place-items: center;
     aspect-ratio: 4 / 5;
-    padding: 1.5rem;
-    border: 2px dashed var(--c-linea);
+    padding: 2rem;
+    border: 1px solid var(--c-borde);
     border-radius: var(--radio);
-    text-align: center;
+    background: var(--c-fondo-alt);
+  }
+  .sobre__hueco :global(.sobre__logo) {
+    width: 100%;
+    max-width: 16rem;
   }
   .columnas {
     display: grid;

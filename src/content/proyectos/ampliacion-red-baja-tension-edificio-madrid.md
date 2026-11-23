@@ -6,6 +6,10 @@ categoria: Baja Tensión
 etiquetas: [baja-tension, redes-de-distribucion, i-de, nuevo-suministro]
 enlace: ""
 destacado: false
+imagenes:
+  - src: ./ampliacion-red-baja-tension-edificio-madrid/foto-ampliacion-red.jpg
+    alt: Zanja abierta en el terreno con tubos corrugados sobre un lecho de grava para una canalización subterránea
+    origen: banco
 ---
 Reto: Dar suministro a un edificio nuevo en Madrid con 7 viviendas, servicios comunes, garaje y un punto de recarga de vehículo eléctrico, con una previsión de 100,96 kW.
 

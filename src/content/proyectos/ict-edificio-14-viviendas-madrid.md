@@ -6,6 +6,10 @@ categoria: ICT
 etiquetas: [ict, viviendas, fibra-optica, telecomunicaciones]
 enlace: ""
 destacado: true
+imagenes:
+  - src: ./ict-edificio-14-viviendas-madrid/foto-ict.jpg
+    alt: Antena de televisión terrestre tipo Yagi sobre un mástil, cubierta de nieve
+    origen: banco
 ---
 Reto: Dotar a un edificio plurifamiliar de 7 plantas y 14 viviendas de una infraestructura común de telecomunicaciones conforme al Real Decreto 346/2011.
 

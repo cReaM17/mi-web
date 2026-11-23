@@ -30,9 +30,12 @@ cabecera, debajo de «destacado», algo así:
 imagenes:
   - src: foto-1.jpg
     alt: Cuadro general de baja tensión terminado
+    origen: obra
   - src: foto-2.jpg
     alt: Zanja con los tubos de la canalización
+    origen: banco
 
-La primera foto es la principal. Si no hay fotos, se usa la ilustración de la categoría.
+origen: obra = foto real de tu trabajo; banco = foto de Pexels, Unsplash… (sale con el
+pie «Imagen ilustrativa»). La primera foto es la principal. Si no hay fotos, se usa la ilustración de la categoría.
 Nada de datos personales, matrículas ni direcciones visibles en las fotos.
 -->

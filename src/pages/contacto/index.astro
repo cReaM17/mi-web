@@ -2,7 +2,6 @@
 import Base from '../../layouts/Base.astro';
 import ContactForm from '../../components/ContactForm.astro';
 import { LLAMADA, SEO, SITIO } from '../../data/sitio';
-import { conPendientes } from '../../lib/texto';
 ---
 <Base titulo={SEO.contacto.titulo} descripcion={SEO.contacto.descripcion}>
   <section class="seccion">
@@ -14,18 +13,16 @@ import { conPendientes } from '../../lib/texto';
         <dl class="datos">
           <div><dt>Teléfono</dt><dd><a href={SITIO.telefonoEnlace}>{SITIO.telefono}</a></dd></div>
           <div><dt>Email</dt><dd><a href={`mailto:${SITIO.email}`}>{SITIO.email}</a></dd></div>
-          <div>
-            <dt>LinkedIn</dt>
-            <dd>
-              {
-                SITIO.redes.find((r) => r.nombre === 'LinkedIn') ? (
-                  <a href={SITIO.redes.find((r) => r.nombre === 'LinkedIn')!.url} rel="me noopener">Perfil de LinkedIn</a>
-                ) : (
-                  <span set:html={conPendientes(SITIO.linkedinPendiente)} />
-                )
-              }
-            </dd>
-          </div>
+          {
+            SITIO.redes.map((r) => (
+              <div>
+                <dt>{r.nombre}</dt>
+                <dd>
+                  <a href={r.url} rel="me noopener">{`Perfil de ${SITIO.nombre} en ${r.nombre}`}</a>
+                </dd>
+              </div>
+            ))
+          }
           <div><dt>Zona de trabajo</dt><dd>{SITIO.zona}</dd></div>
         </dl>
       </div>

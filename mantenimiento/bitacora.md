@@ -40,3 +40,41 @@ Madrid. Formato: qué se revisó · qué se cambió · resultado de `npm run che
 
 **Nota**: el material marcaba el n.º de colegiado del COIT como pendiente; se usa
 **C21748**, el que David dio en el encargo.
+
+---
+
+## 2026-11-23 20:47 · Cambios pedidos por David (LinkedIn, fotos, «Sobre mí»)
+
+**Revisado**
+- `mantenimiento/incidencias.md` (revisión semanal del 2026-11-23): las 364 «incidencias»
+  eran falsos positivos. lychee no podía resolver los enlaces que empiezan por «/»
+  porque faltaba `--root-dir`. Ningún enlace externo estaba roto. **Resuelto**: se añade
+  `--root-dir` en `salud-semanal.yml` y se excluye linkedin.com, que bloquea a los robots.
+
+**Cambiado**
+- LinkedIn añadido (`src/data/sitio.ts` → `redes`): se muestra en el pie, en Contacto y
+  en los datos estructurados. Se quita su [PENDIENTE].
+- «Sobre mí»: muestra el logo DCM (`Logo.astro`, con modo oscuro) en el hueco del retrato
+  mientras no exista `material/retrato.jpg`. Se quita, a petición de David, el párrafo
+  sobre Iberdrola y ENAIRE (sigue en `material/contenido-web.md`, pero no debe volver).
+- Fotos de banco de imágenes (Pexels/Unsplash) aportadas por David, una por ficha,
+  como imagen principal: reducidas a 2400 px en `src/content/proyectos/<slug>/`, con
+  `alt` descriptivo y `origen: banco`, de modo que llevan el pie «Imagen ilustrativa».
+  Los originales de `material/` se renombran para quitar la doble extensión `.jpg.jpg`.
+  Los servicios siguen con las ilustraciones, que también sirven de reserva.
+- Esquema de ficha: nuevo campo `origen: obra | banco` por imagen (por defecto `obra`).
+  Las reglas se actualizan en CLAUDE.md, `buzon/LEEME.md` y `buzon/plantilla.md`.
+- Imágenes para redes sociales en JPG cuando son fotos. Tarjetas con tamaños
+  intermedios (360/540/720/960 px) y solo la primera con prioridad alta.
+
+**Comprobaciones**
+- `npm run check`: ✓ · `npm run build`: ✓
+- Lighthouse móvil (local): inicio 99–100, proyectos 98, ficha 99, sobre mí 100.
+  Accesibilidad, buenas prácticas y SEO: 100.
+
+**Pendientes**
+1. NIF y domicilio profesional: David envió los marcadores «[tu NIF]» y «[tu dirección]»
+   sin rellenar, así que siguen como [PENDIENTE].
+2. Logo oficial en SVG · retrato · fotos reales de obra.
+3. Fichas de Navalcarnero y de 2,29 MW: confirmar el papel de David.
+4. Revisión legal por la gestoría · confirmar el proveedor del formulario.

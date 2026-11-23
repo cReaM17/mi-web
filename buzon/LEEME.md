@@ -10,9 +10,9 @@ en fichas publicadas en la web y moverá los originales a `buzon/procesado/AAAA-
 2. **Una nota de texto** con lo que recuerdes del proyecto (`.md` o `.txt`). Claude la
    pasará a la plantilla usando **solo** lo que tú escribas. Lo que falte quedará
    marcado como `[PENDIENTE: ...]` en la web hasta que lo completes.
-3. **Fotos** (`.jpg`, `.png`, `.webp`) junto a la ficha o la nota. Si quieres que se
-   usen, indica en la ficha su descripción (texto alternativo). Sin datos personales,
-   matrículas ni direcciones visibles.
+3. **Fotos** (`.jpg`, `.png`, `.webp`) junto a la ficha o la nota. Indica si son fotos
+   reales de la obra o de un banco de imágenes (estas saldrán con el pie «Imagen
+   ilustrativa»). Sin datos personales, matrículas ni direcciones visibles.
 
 No subas los PDF de los proyectos: no se publican.
 
@@ -26,10 +26,13 @@ No subas los PDF de los proyectos: no se publican.
 4. **Imágenes**:
    - Si hay fotos, las copia a `src/content/proyectos/<slug>/` y las declara en
      `imagenes:` con un `alt` descriptivo (si la nota no lo da, lo redacta describiendo
-     solo lo que se ve).
+     solo lo que se ve) y su `origen`: `obra` si es una foto real del trabajo, `banco` si
+     viene de un banco de imágenes (Pexels, Unsplash…). Las de banco llevan siempre el
+     pie «Imagen ilustrativa»; las de obra, nunca. Si no está claro, pregunta en la
+     bitácora y usa `banco` mientras tanto.
    - Si no hay fotos, **no añade `imagenes:`**: la web usa automáticamente la
-     ilustración SVG de su categoría (`src/assets/ilustraciones/`). Nunca usa fotos
-     de bancos de imágenes ni imágenes generadas que parezcan fotos reales.
+     ilustración SVG de su categoría (`src/assets/ilustraciones/`). No busca fotos por
+     su cuenta ni usa imágenes generadas que parezcan fotos reales.
    - Si la categoría no existe, no la inventa: usa la más cercana y lo indica en la
      bitácora, o deja el archivo en el buzón y lo explica.
 5. Ejecuta `npm run check` y `npm run build`. Si fallan, sigue las reglas de `CLAUDE.md`.

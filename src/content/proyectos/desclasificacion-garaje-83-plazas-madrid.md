@@ -6,6 +6,10 @@ categoria: Baja Tensión
 etiquetas: [garajes, itc-bt-29, comunidades, visado]
 enlace: ""
 destacado: true
+imagenes:
+  - src: ./desclasificacion-garaje-83-plazas-madrid/foto-garaje.jpg
+    alt: Aparcamiento subterráneo vacío con pilares señalizados en amarillo y negro e iluminación fluorescente en el techo
+    origen: banco
 ---
 Reto: Justificar que un aparcamiento privado de 2.400 m² en dos sótanos puede desclasificarse como zona con riesgo de incendio y explosión, según la ITC-BT-29 del REBT y la norma UNE 60079-10.
 

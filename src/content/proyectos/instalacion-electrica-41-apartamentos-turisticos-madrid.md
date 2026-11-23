@@ -6,6 +6,10 @@ categoria: Baja Tensión
 etiquetas: [baja-tension, publica-concurrencia, hosteleria, visado]
 enlace: ""
 destacado: true
+imagenes:
+  - src: ./instalacion-electrica-41-apartamentos-turisticos-madrid/foto-apartamentos.jpg
+    alt: Mano con un destornillador comprobando los interruptores automáticos de un cuadro eléctrico con cables de colores
+    origen: banco
 ---
 Reto: Proyectar la instalación eléctrica de un edificio de hospedaje con 41 apartamentos turísticos y servicios comunes, tratado como local de pública concurrencia (ITC-BT-28).
 

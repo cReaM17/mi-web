@@ -6,7 +6,7 @@ import { SITIO } from '../data/sitio';
 export interface SeoProps {
   titulo: string;
   descripcion: string;
-  /** Imagen para redes sociales (se convierte a PNG 1200×630). */
+  /** Imagen para redes sociales (1200×630: PNG si es ilustración, JPG si es foto). */
   imagen?: ImageMetadata;
   imagenAlt?: string;
   tipo?: 'website' | 'article' | 'profile';
@@ -20,7 +20,14 @@ const canonica = new URL(Astro.url.pathname, Astro.site);
 let ogUrl = new URL('/og-default.png', Astro.site).href;
 let ogAlt = 'Tarjeta de visita de DCM, David Clemente Martín, ingeniero de Telecomunicación';
 if (imagen) {
-  const og = await getImage({ src: imagen, format: 'png', width: 1200, height: 630, fit: 'cover' });
+  const og = await getImage({
+    src: imagen,
+    format: imagen.format === 'svg' ? 'png' : 'jpg',
+    quality: 80,
+    width: 1200,
+    height: 630,
+    fit: 'cover',
+  });
   ogUrl = new URL(og.src, Astro.site).href;
   ogAlt = imagenAlt ?? titulo;
 }
